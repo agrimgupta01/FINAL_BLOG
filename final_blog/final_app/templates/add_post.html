@@ -6,7 +6,7 @@
 <h1>Add Blog Post</h1>
 <br /><br />
 <div class="form-group">
-    <form action="" method="POST">{% csrf_token %}
+    <form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
         {{ form.media }}
         {{ form.as_p }}
         <button class="btn btn-secondary">Post</button>

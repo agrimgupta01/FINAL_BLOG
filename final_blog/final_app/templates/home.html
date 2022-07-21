@@ -2,7 +2,11 @@
 {% block content %}
 
 
-<h1>Posts</h1>
+<center>
+    <h1><strong>
+            Blog Posts
+        </strong></h1>
+</center><br />
 <ul>
     {% for post in object_list %}
     <li><a href="{% url 'details_post' post.pk %}"> {{post.title}} </a>| <a
@@ -19,7 +23,7 @@
         <br />
         {{post.snippet}}
 
-    </li>
+    </li><br />
     {% endfor %}
 </ul>
 

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{%load static%}
 {%block title%}{{post.title_tag}}{%endblock%}
 
 {% block content %}
@@ -16,10 +16,13 @@
 <h6>Category : {{post.category}}</h6>
 <hr>
 <br />
+{%if post.header_image%}
+<img src="{{post.header_image.url}}" width="300" , height="350">
+<br /><br />
+{%endif%}
 {{post.body|safe}}
-<br /><br />
-<a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
-<br /><br />
+
+<br />
 <hr><br />
 <form action="{%url 'like_post' post.pk%}" method="POST">
     {%csrf_token%}
@@ -33,5 +36,64 @@
     <small> <a href="{% url 'login' %}">Login</a> to Like!</small>
     {%endif%}
     - {{total_likes}} Likes
-</form>
+</form><br />
+<hr>
+<br /><br />
+<div class="card mb-3">
+    <div class="row g-0">
+        <div class="col-md-2">
+            {%if post.author.profile.profile_pic%}
+            <img src="{{post.author.profile.profile_pic.url}}" width="130" height="200">
+            {%else%}
+
+            <img src="{%static 'final_app/images/download.png'%}" class=card-img>
+
+            {%endif%}
+            <!-- we can make the image border round or otehr shape using bbotstrap-->
+        </div>
+        <div class="col-md-10">
+            <div class="card-body">
+                <h5 class="card-title">{{post.author.first_name}} {{post.author.last_name}}</h5>
+                {%if post.author.profile.id%}
+                <p class="small text-muted">
+                    <a href="{%url 'show_profile_page' post.author.profile.id%}">Profile Page</a><br />
+                    {%if post.author.profile.website_url%}| <a href="{{post.author.profile.website_url}}">Website
+                    </a>{%endif%}
+                    {%if post.author.profile.facebook_url%} | <a href="{{post.author.profile.facebook_url}}">Facebook
+                    </a>{%endif%}
+                    {%if post.author.profile.twitter_url%} | <a href="{{post.author.profile.twitter_url}}">Twitter
+                    </a>{%endif%}
+                    {%if post.author.profile.instagram_url%} | <a href="{{post.author.profile.instagram_url}}">Instagram
+                    </a>{%endif%}
+                    {%if post.author.profile.pinterest_url%} | <a href="{{post.author.profile.pinterest_url}}">Pinterest
+                    </a>{%endif%}
+                    {%if post.author.profile.Linkedin_url%} | <a href="{{post.author.profile.Linkedin_url}}">Linkedin
+                    </a>{%endif%}
+                </p>
+                <p class="card-text ">{{post.author.profile.bio}}</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<hr>
+<h2> Comments</h2><br />
+{%if not post.comments.all %}
+No Comments Yet... <a href="{%url 'add_comment' post.pk%}"> Add One !</a>
+{%else%}
+<a href="{%url 'add_comment' post.pk%}">Add a Comment !</a><br /><br />
+{%for comment in post.comments.all%}<strong>
+    {{comment.name}}-
+    {{comment.date_added}}
+</strong>
+<br />
+{{comment.body}}<br /><br />
+
+{%endfor%}
+<br />
+<a href="{%url 'add_comment' post.pk%}">Add a Comment !</a>
+{%endif%}
+<hr><br /><br /><a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+<br /><br /><br />
 {% endblock %}
